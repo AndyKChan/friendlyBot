@@ -78,7 +78,7 @@ bot.dialog('/profile', [
     }
 ]);
 
-dialog.matches(/^upload/i, [
+dialog.matches('Upload_Pic', [
 
 	function (session) {
 		builder.Prompts.attachment(session, "Upload a picture of food for me to analyze!");
@@ -119,7 +119,7 @@ dialog.matches(/^upload/i, [
 					
 					console.log('success');
 				}
-				
+
 				session.endDialog();
 			});
 				
