@@ -29,10 +29,10 @@ var model = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/603163cb-
 var recognizer = new builder.LuisRecognizer(model);
 var dialog = new builder.IntentDialog({ recognizers: [recognizer] });
 
-
 bot.dialog('/', dialog);
 
 dialog.matches('Change_Name', [
+
     function (session, results) {
 		if(results.entities && results.entities.length && results.entities[0]){
 			var userName =  results.entities[0].entity;
@@ -43,12 +43,14 @@ dialog.matches('Change_Name', [
 			session.beginDialog('/profile');
 		}
     },
+	
     function (session, results) {
         session.send('Ok... Changed your name to %s', session.userData.name);
     }
 ]);
 
 dialog.onDefault([
+
     function (session, args, next) {
         if (!session.userData.name) {
             session.beginDialog('/profile');
@@ -56,15 +58,18 @@ dialog.onDefault([
             next();
         }
     },
+	
     function (session, results) {
         session.send('Hello %s!', session.userData.name);
     }
 ]);
 
 bot.dialog('/profile', [
+
     function (session) {
         builder.Prompts.text(session, 'Hi! What is your name?');
     },
+	
     function (session, results) {
         session.userData.name = results.response;
         session.endDialog();
@@ -72,9 +77,11 @@ bot.dialog('/profile', [
 ]);
 
 dialog.matches(/^upload/i, [
+
 	function(session){
 		builder.Prompts.attachment(session, "Upload a picture of food for me to analyze!");
 	},
+	
 	function(session, results){
 		var result = ''
 		console.log(results.response[0].contentUrl);
