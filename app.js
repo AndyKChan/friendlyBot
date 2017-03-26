@@ -1,5 +1,6 @@
 var restify = require('restify');
 var builder = require('botbuilder');
+var request = require('superagent');
 
 //=========================================================
 // Bot Setup
@@ -75,11 +76,42 @@ dialog.matches(/^upload/i, [
 		builder.Prompts.attachment(session, "Upload a picture of food for me to analyze!");
 	},
 	function(session, results){
+		var result = ''
 		console.log(results.response[0].contentUrl);
 		session.userData.foodPic = results.response;
-		session.send(results.response[0].contentUrl);
+		
+		if(results.response[0].contentUrl.match(/localhost/i)){
+			result = 'https://g.foolcdn.com/editorial/images/225916/getty-apple_large.jpg'
+		} else {
+			result = results.response[0].contentUrl;
+		}
+		
+		request
+		   .post('https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Categories,Tags&language=en')
+		   .send({"url":result})
+		   .set('Content-Type', 'application/json')
+		   .set('Ocp-Apim-Subscription-Key', '450efdb5185b46eca7f09bf89646731c')
+		   .end(function(err, res){
+		
+		if (err || !res.ok) {
+			session.send('oops')
+		} else {
+			console.log(res)
+			var food = res.body.tags.filter(function(t){return t.hint == 'food'});
+			console.log(food);
+			
+			if(food.length){
+				session.send(food[0].name)
+			} else { 
+			session.send('no food was found!')
+			}
+			
+			console.log('success');
+		}
 		session.endDialog();
-	}
+		});
+				
+		}
 ]);
 
 dialog.matches('Book_Holiday', builder.DialogAction.send('Sure, booking your holiday!'));
