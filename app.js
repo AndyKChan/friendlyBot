@@ -77,7 +77,12 @@ dialog.matches(/^upload/i, [
 	function(session, results){
 		console.log(results.response[0].contentUrl);
 		session.userData.foodPic = results.response;
+		if(results.response[0].contentUrl.match(/localhost/i)){
+			var result = 'https://g.foolcdn.com/editorial/images/225916/getty-apple_large.jpg'
+			session.send(result);
+		} else{
 		session.send(results.response[0].contentUrl);
+		}
 		session.endDialog();
 	}
 ]);
