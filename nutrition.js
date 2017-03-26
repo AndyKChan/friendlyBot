@@ -2,12 +2,12 @@
 // can contain all the perameters the API accepts in the `POST /v2/search` endpoint
 var NutritionixClient = require('nutritionix');
 var nutritionix = new NutritionixClient({
-    appId: 'f0efc5ac',
-    appKey: '75f8e573f3d4e21f9b74334e590dc47a'
+    appId: 'e69dc162',
+    appKey: '865932f4797453026efba0204cc585bd'
     // debug: true, // defaults to false
 });
 
-function getFatInfo(food){
+function getFatInfo (food) {
   // This will perform a search. The object passed into this function
   // can contain all the perameters the API accepts in the `POST /v2/search` endpoint
   return nutritionix.search({
@@ -25,7 +25,7 @@ function getFatInfo(food){
   });
 }
 
-  function getCaloriesInfo(food){
+  function getCaloriesInfo (food) {
     // This will perform a search. The object passed into this function
     // can contain all the perameters the API accepts in the `POST /v2/search` endpoint
     return nutritionix.search({
@@ -42,7 +42,7 @@ function getFatInfo(food){
     });
   }
 
-  function getCarbInfo(food){
+  function getCarbInfo (food) {
       // This will perform a search. The object passed into this function
       // can contain all the perameters the API accepts in the `POST /v2/search` endpoint
       return nutritionix.search({
@@ -59,11 +59,11 @@ function getFatInfo(food){
       });
     }
 
-function getNutrition(food){
+function getNutrition (food) {
   return Promise.all([getFatInfo(food), getCarbInfo(food), getCaloriesInfo(food)]).then(values=> {
-    return 'Nutrition info for ' + food + ' ' + 
-        values[0] + ' ' +
-        values[1] + ' ' +
+    return 'Nutrition info for ' + food + ' : ' + 
+        values[0] + ' / ' +
+        values[1] + ' / ' +
         values[2];
   })
 

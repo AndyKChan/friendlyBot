@@ -18,6 +18,7 @@ var connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
     appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
+
 var bot = new builder.UniversalBot(connector);
 server.post('/api/messages', connector.listen());
 
@@ -79,11 +80,11 @@ bot.dialog('/profile', [
 
 dialog.matches(/^upload/i, [
 
-	function(session){
+	function (session) {
 		builder.Prompts.attachment(session, "Upload a picture of food for me to analyze!");
 	},
 	
-	function(session, results){
+	function (session, results) {
 		var result = ''
 		console.log(results.response[0].contentUrl);
 		session.userData.foodPic = results.response;
@@ -99,29 +100,28 @@ dialog.matches(/^upload/i, [
 		   .send({"url":result})
 		   .set('Content-Type', 'application/json')
 		   .set('Ocp-Apim-Subscription-Key', '450efdb5185b46eca7f09bf89646731c')
-		   .end(function(err, res){
+		   .end(
+		   	function (err, res){
 		
-		if (err || !res.ok) {
-			session.send('oops')
-		} else {
-			console.log(res)
-			var food = res.body.tags.filter(function(t){return t.hint == 'food'});
-			console.log(food);
-			
-			//food[0].name is the food
-			if(food.length){
-				getNutrition(food[0].name).then(facts => session.send(facts));
-			} else { 
-			session.send('no food was found!')
-			}
-			
-			console.log('success');
-		}
-		session.endDialog();
-		});
+				if (err || !res.ok) {
+					session.send('oops')
+				} else {
+					console.log(res)
+					var food = res.body.tags.filter(function(t){return t.hint == 'food'});
+					console.log(food);
+					
+					//food[0].name is the food
+					if(food.length){
+						getNutrition(food[0].name).then(facts => session.send(facts));
+					} else { 
+					session.send('no food was found!')
+					}
+					
+					console.log('success');
+				}
+				
+				session.endDialog();
+			});
 				
 		}
 ]);
-
-dialog.matches('Book_Holiday', builder.DialogAction.send('Sure, booking your holiday!'));
-/*dialog.onDefault(builder.DialogAction.send("I'm sorry I didn't understand."));*/
