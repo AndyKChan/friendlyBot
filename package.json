@@ -1,0 +1,24 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "friendly social media bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndyKChan/friendlyBot.git"
+  },
+  "author": "Andy Chan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndyKChan/friendlyBot/issues"
+  },
+  "homepage": "https://github.com/AndyKChan/friendlyBot#readme",
+  "dependencies": {
+    "botbuilder": "^3.7.0",
+    "restify": "^4.3.0",
+    "uuid": "^3.0.1"
+  }
+}
