@@ -7,36 +7,74 @@ var nutritionix = new NutritionixClient({
     // debug: true, // defaults to false
 });
 
-// This will perform a search. The object passed into this function
-// can contain all the perameters the API accepts in the `POST /v2/search` endpoint
-nutritionix.search({
-  q:'salad',
-  // use these for paging
-  limit: 10,
-  offset: 0,
-  fields: [
-   "item_name",
-   "brand_name",
-   "nf_calories",
-   "nf_sodium",
-   "item_type"
- ],
+function getFatInfo(food){
+  // This will perform a search. The object passed into this function
+  // can contain all the perameters the API accepts in the `POST /v2/search` endpoint
+  nutritionix.search({
+    q:food,
+    // use these for paging
+    limit: 1,
+    offset: 0,
 
-  // controls the basic nutrient returned in search
-  search_nutrient: 'calories'
-}).then(results => {
-  console.log(results);
-
-
-});
-
-function successHandler(data){
-  console.log("hello");
+    // controls the basic nutrient returned in search
+    search_nutrient: 'fat'
+  }).then(results => {
+    var fullString = results.results[0].nutrient_name + ': ' +results.results[0].nutrient_value;
+    console.log(fullString);
+    return fullString;
+  });
 }
 
-function errorHandler(data){
-  console.log("hello");
+  function getCaloriesInfo(food){
+    // This will perform a search. The object passed into this function
+    // can contain all the perameters the API accepts in the `POST /v2/search` endpoint
+    nutritionix.search({
+      q:food,
+      // use these for paging
+      limit: 1,
+      offset: 0,
+
+      // controls the basic nutrient returned in search
+      search_nutrient: 'calories'
+    }).then(results => {
+      var fullString = results.results[0].nutrient_name + ': ' +results.results[0].nutrient_value;
+      console.log(fullString);
+      return fullString;
+    });
+  }
+
+    function getCarbInfo(food){
+      // This will perform a search. The object passed into this function
+      // can contain all the perameters the API accepts in the `POST /v2/search` endpoint
+      nutritionix.search({
+        q:food,
+        // use these for paging
+        limit: 1,
+        offset: 0,
+
+        // controls the basic nutrient returned in search
+        search_nutrient: 'carb'
+      }).then(results => {
+        var fullString = JSON.stringify(results.results[0].nutrient_name) + ': ' + JSON.stringify(results.results[0].nutrient_value);
+        console.log(fullString);
+        return fullString;
+      });
+    }
+
+function getNutrition(food){
+  var fullNutritionString =
+  'Nutrition info for ' + food + ' ' +
+  getFatInfo(food) + ' ' +
+  getCarbInfo(food) + ' ' +
+  getCaloriesInfo(food);
+
+  console.log(fullNutritionString);
 }
+
+getNutrition('salad');
+
+
+
 
 //
 //
