@@ -1,6 +1,7 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 var request = require('superagent');
+var getNutrition = require('./nutrition.js');
 
 //=========================================================
 // Bot Setup
@@ -107,8 +108,9 @@ dialog.matches(/^upload/i, [
 			var food = res.body.tags.filter(function(t){return t.hint == 'food'});
 			console.log(food);
 			
+			//food[0].name is the food
 			if(food.length){
-				session.send(food[0].name)
+				getNutrition(food[0].name).then(facts => session.send(facts));
 			} else { 
 			session.send('no food was found!')
 			}
